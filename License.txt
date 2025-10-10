@@ -50,3 +50,6 @@ The following models have been used as reference/included and adapted:
     Lluis VINENT (Unity development)
     Ana Teresa BIGIO (Portuguese translation of the anatomical structures)
     Carlos TORRES VILLAR (Spanish translation of the anatomical structures)
+    Paola Perin, Daniele Cossellu, Elisa Vivado (Italian translation of the anatomical structures) 
+    Jadwiga Palosz (Polish translation of the anatomical structures) 
+    Shariar Ahmadpour (Parsi translation of the anatomical structures)
