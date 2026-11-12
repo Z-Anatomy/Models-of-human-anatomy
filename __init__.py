@@ -1155,14 +1155,35 @@ class VIEW3D_OT_za_switch_system(bpy.types.Operator):
         if self.index >= len(cols):
             return {'CANCELLED'}
         target = cols[self.index]
+
+        # Also toggle the view-layer (outliner eye icon) visibility,
+        # otherwise the outliner gives no feedback on switching.
+        lc_map = {}
+        def walk(lc):
+            lc_map[lc.collection.name] = lc
+            for ch in lc.children:
+                walk(ch)
+        if context.view_layer:
+            walk(context.view_layer.layer_collection)
+
+        def is_visible(col):
+            lc = lc_map.get(col.name)
+            return not col.hide_viewport and not (lc and lc.hide_viewport)
+
+        def set_visible(col, vis):
+            col.hide_viewport = not vis
+            lc = lc_map.get(col.name)
+            if lc:
+                lc.hide_viewport = not vis
+
         if self.combine:
-            target.hide_viewport = not target.hide_viewport
+            set_visible(target, not is_visible(target))
         else:
             for c in cols:
-                c.hide_viewport = (c is not target)
+                set_visible(c, c is target)
         if context.screen:
             for area in context.screen.areas:
-                if area.type == 'VIEW_3D':
+                if area.type in {'VIEW_3D', 'OUTLINER'}:
                     area.tag_redraw()
         return {'FINISHED'}
 
